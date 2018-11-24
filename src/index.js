@@ -1,6 +1,7 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
 
@@ -11,6 +12,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
+
 }
 
 const initFirstPage = function(oldRoute, transClass) {
@@ -25,6 +27,13 @@ const didMountFirstPage = function () {
 
     // Here you will do the most action, now page is ready
     console.log('Did mount first page')
+}
+
+const didMountSecondPage = function() {
+    // Here you will do the most action, now page is ready
+    console.log('Did mount second page');
+    updatePlace('Polska', 'Random');
+    updatePrice('2 000');
 }
 
 const willUnmountFirstPage = function() {
@@ -59,13 +68,8 @@ Core.setupRoutes([
         path: /^second(\/(\d{1,2}))?$/,
         index: 1,
         initHandler: initSecondPage,
-        events: [
-            {
-                element: '.come-back',
-                type: 'click',
-                handler: Core.redirect('/')
-            },
-        ]
+        mountedHandler: didMountSecondPage,
+        events: []
     },
 ]);
 
