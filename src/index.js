@@ -1,7 +1,11 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import InitSimulation from './views/game/addSimulation';
+import { submitTrack } from './views/game/trackController';
+import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
+import getData from './views/login/login.js';
 
 const initSecondPage = function(oldRoute, transClass, id) {
     // Each page must have this method!
@@ -10,6 +14,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
+    InitSimulation();
 }
 
 const initFirstPage = function(oldRoute, transClass) {
@@ -20,9 +25,17 @@ const initFirstPage = function(oldRoute, transClass) {
     Core.pageAnimationInit(oldRoute, transClass);
 }
 
-const didMountFirstPage = function() {
+const didMountFirstPage = function () {
+
     // Here you will do the most action, now page is ready
     console.log('Did mount first page')
+}
+
+const didMountSecondPage = function() {
+    // Here you will do the most action, now page is ready
+    console.log('Did mount second page');
+    updatePlace('Polska', 'Random');
+    updatePrice('2 000');
 }
 
 const willUnmountFirstPage = function() {
@@ -46,9 +59,9 @@ Core.setupRoutes([
         didRemove: didRemovedFirstPage,
         events: [ // list of events
             {
-                element: '.go-to-another', // selector to element
-                type: 'click', // type of event
-                handler: Core.redirect('/second/1') // action (in this case is redirect)
+                element: '#form', // selector to element
+                type: 'submit', // type of event
+                handler: getData // action
             },
         ],
     },
@@ -57,11 +70,12 @@ Core.setupRoutes([
         path: /^second(\/(\d{1,2}))?$/,
         index: 1,
         initHandler: initSecondPage,
+        mountedHandler: didMountSecondPage,
         events: [
             {
-                element: '.come-back',
+                element: '.submit-track',
                 type: 'click',
-                handler: Core.redirect('/')
+                handler: submitTrack
             },
         ]
     },
@@ -69,7 +83,6 @@ Core.setupRoutes([
 
 
 window.addEventListener('beforeinstallprompt', e => {
-  console.log('ssssss');
   e.preventDefault();
   e.prompt();
 });
