@@ -1,0 +1,15 @@
+@import 'settings/colors';
+@import 'settings/breakpoints';
+
+@import 'base/base';
+
+@import 'components/page';
+@import 'components/wrapper';
+@import 'components/icon';
+@import 'components/button';
+
+@import 'trumps/animations.scss';
+
+body {
+  background: $color-secondary;
+}

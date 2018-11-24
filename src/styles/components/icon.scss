@@ -1,0 +1,11 @@
+.icon {
+  display: block;
+  width: 100px;
+  margin: auto;
+  @include tablet {
+    width: 200px;
+  }
+  @include desktop {
+    width: 300px;
+  }
+}

@@ -1,0 +1,17 @@
+.btn {
+  display: block;
+  max-width: 280px;
+  padding: 15px;
+  margin: 30px auto 0;
+  background-color: $color-secondary;
+  color: $color-basic;
+  font-size: 20px;
+  font-family: Roboto;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 8px solid $color-accent;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: $color-accent;
+  }
+}
