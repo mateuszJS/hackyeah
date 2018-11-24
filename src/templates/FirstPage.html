@@ -1,6 +1,13 @@
 <div class="wrapper animated delay-4">
     <img src="../assets/info-icon.svg" class="icon animation delay-1" />
-    <input class="input" type="text" id="email" name="email" required placeholder="E-mail"/>
-    <input class="input" type="password" id="password" name="password" required placeholder="Password"/>
-    <button class="btn go-to-another">sign in</button>
+    <form id="form" novalidate> 
+        <input class="input" type="text" id="email" name="email" placeholder="E-mail" />
+        <p id="incorrect_email" class="error"></p>
+        <p id="empty_email" class="error"></p>
+        <input class="input" type="password" id="password" name="password" placeholder="Password" />
+        <p id="empty_password" class="error"></p>
+        <p id="incorrect_data" class="error"></p>
+
+        <button class="btn submit">sign in</button>
+    </form>
 </div>
