@@ -10,6 +10,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
+
 }
 
 const initFirstPage = function(oldRoute, transClass) {
@@ -23,6 +24,26 @@ const initFirstPage = function(oldRoute, transClass) {
 const didMountFirstPage = function() {
     // Here you will do the most action, now page is ready
     console.log('Did mount first page')
+}
+
+const didMountSecondPage = function() {
+    // Here you will do the most action, now page is ready
+    console.log('Did mount second page');
+    updatePlace('Polska', 'Random');
+    updatePrice('2 000');
+}
+
+const updatePlace = function (newCountry, newCity) {
+    console.log('update place');
+    var country = document.getElementById("id_country"),
+    city = document.getElementById("id_city");  
+    country.innerHTML = newCountry;
+    city.innerHTML = newCity;
+}
+
+const updatePrice = function (newPrice) {
+    var price = document.getElementById("id_price");  
+    price.innerHTML = newPrice;    
 }
 
 const willUnmountFirstPage = function() {
@@ -57,13 +78,14 @@ Core.setupRoutes([
         path: /^second(\/(\d{1,2}))?$/,
         index: 1,
         initHandler: initSecondPage,
-        events: [
+        mountedHandler: didMountSecondPage,
+        /*events: [
             {
                 element: '.come-back',
                 type: 'click',
                 handler: Core.redirect('/')
             },
-        ]
+        ]*/
     },
 ]);
 
