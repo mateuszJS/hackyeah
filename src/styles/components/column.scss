@@ -1,0 +1,20 @@
+.col-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: 40px;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.col-half {
+  position: relative;
+  display: flex;
+  width: 50%;
+  margin: 5px;
+  padding: 40px;
+  border-radius: 10px;
+  background-color: #2b2b2b;
+  flex-direction: row;
+  overflow: hidden;
+}
