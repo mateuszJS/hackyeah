@@ -1,6 +1,7 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 
 const initSecondPage = function(oldRoute, transClass, id) {
@@ -31,19 +32,6 @@ const didMountSecondPage = function() {
     console.log('Did mount second page');
     updatePlace('Polska', 'Random');
     updatePrice('2 000');
-}
-
-const updatePlace = function (newCountry, newCity) {
-    console.log('update place');
-    var country = document.getElementById("id_country"),
-    city = document.getElementById("id_city");  
-    country.innerHTML = newCountry;
-    city.innerHTML = newCity;
-}
-
-const updatePrice = function (newPrice) {
-    var price = document.getElementById("id_price");  
-    price.innerHTML = newPrice;    
 }
 
 const willUnmountFirstPage = function() {
@@ -79,13 +67,7 @@ Core.setupRoutes([
         index: 1,
         initHandler: initSecondPage,
         mountedHandler: didMountSecondPage,
-        /*events: [
-            {
-                element: '.come-back',
-                type: 'click',
-                handler: Core.redirect('/')
-            },
-        ]*/
+        events: []
     },
 ]);
 
