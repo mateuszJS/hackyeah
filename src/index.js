@@ -1,6 +1,8 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import InitSimulation from './views/game/addSimulation';
+import { submitTrack } from './views/game/trackController';
 import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
@@ -12,7 +14,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
-
+    InitSimulation();
 }
 
 const initFirstPage = function(oldRoute, transClass) {
@@ -69,7 +71,13 @@ Core.setupRoutes([
         index: 1,
         initHandler: initSecondPage,
         mountedHandler: didMountSecondPage,
-        events: []
+        events: [
+            {
+                element: '.submit-track',
+                type: 'click',
+                handler: submitTrack
+            },
+        ]
     },
 ]);
 
