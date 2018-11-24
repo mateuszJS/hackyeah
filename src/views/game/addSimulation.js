@@ -3,23 +3,18 @@ import clamp from '../../utils/clamp';
 import createPoint from './createPoint';
 import createLight from './createLight';
 import createPlanet from './createPlanet';
-
-
-let mouse = new THREE.Vector2(0,0);
-let raygun = new THREE.Raycaster();
-raygun.params.Points.threshold = 50;
-
-let camera;
+import { addNewCity } from './trackController';
 
 const init = () => {
   const container = document.querySelector('.works-page');
   const renderer = new THREE.WebGLRenderer({ alpha: true });
+  const raygun = new THREE.Raycaster();
   const RADIUS = clamp(70, window.innerWidth * 0.4, 400);
   const WIDTH = window.innerWidth;
   const HEIGHT = window.innerHeight;
   renderer.setSize(WIDTH, HEIGHT);
 
-  camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 10000);
+  const camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 10000);
   camera.position.set(0, 0, 500);
 
 
@@ -81,7 +76,13 @@ const init = () => {
     raygun.setFromCamera({x, y}, camera);
     const hits = raygun.intersectObjects(points, true);
     if (hits.length > 0) {
-      hits[0].object.material.color.set(0x0000ff);
+      const dataFromPoint = hits[0].object;
+      dataFromPoint.material.color.set(0x0000ff);
+      addNewCity({
+        id: dataFromPoint.cityId,
+        name: dataFromPoint.name,
+        country: dataFromPoint.country
+      })
       renderer.render(scene, camera);
     }
   }

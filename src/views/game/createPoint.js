@@ -30,6 +30,9 @@ const createPoint = (distance) => {
       const data = myJson[index];
       const vec = lonLatToVector3(data.Longitude, data.Latitude, distance);
       sphere.position.set(vec.x, vec.y, vec.z);
+      sphere.cityId = data.CityID;
+      sphere.name = data.CityName;
+      sphere.country = data.Country;
     })
   });
   return spheres;

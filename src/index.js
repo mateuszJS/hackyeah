@@ -2,6 +2,7 @@ import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
 import InitSimulation from './views/game/addSimulation';
+import { submitTrack } from './views/game/trackController';
 import './styles/index.scss';
 
 const initSecondPage = function(oldRoute, transClass, id) {
@@ -61,9 +62,9 @@ Core.setupRoutes([
         initHandler: initSecondPage,
         events: [
             {
-                element: '.come-back',
+                element: '.submit-track',
                 type: 'click',
-                handler: Core.redirect('/')
+                handler: submitTrack
             },
         ]
     },
