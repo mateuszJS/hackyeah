@@ -71,7 +71,6 @@ Core.setupRoutes([
 
 
 window.addEventListener('beforeinstallprompt', e => {
-  console.log('hehszki jestesmy w TV');
   e.preventDefault();
   e.prompt();
 });

@@ -21,17 +21,13 @@ function getData(evt) {
     if (!password) {
         document.getElementById('empty_password').innerHTML = "Type password";
     }
-
     if(email && password){
         setData(email, btoa(encodeURIComponent(password)));
     }
-
-    
 }
 
 function setData(email, password) {
     const url = "http://hackyeahbe.azurewebsites.net/chcem/userkow/logowanko";
-
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", url);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
