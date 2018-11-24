@@ -23,7 +23,7 @@ function getData(evt) {
     }
 
     if(email && password){
-        setData(email, password);
+        setData(email, btoa(encodeURIComponent(password)));
     }
 
     
