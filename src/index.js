@@ -1,7 +1,7 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
-import InitPlanet from './views/game/addPlanet';
+import InitSimulation from './views/game/addSimulation';
 import './styles/index.scss';
 
 const initSecondPage = function(oldRoute, transClass, id) {
@@ -11,7 +11,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
-    InitPlanet();
+    InitSimulation();
 }
 
 const initFirstPage = function(oldRoute, transClass) {
