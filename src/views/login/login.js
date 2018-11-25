@@ -37,7 +37,14 @@ function setData(email, password) {
         if (xmlhttp.readyState === 4) {
             let res = JSON.parse(xmlhttp.response);
             if (res.success) {
+                window.user.email = email;
+                window.user.id = res.data;
+                localStorage.setItem("email", window.user.email);
+                localStorage.setItem("id", window.user.id);
+
                 Core.redirect('/second')();
+            } else {
+                document.getElementById('incorrect_data').innerHTML = "Icorrect e-mail or/and password";
             }
         }
     }

@@ -11,11 +11,32 @@
   font-weight: 700;
   border: 8px solid $color-accent;
   transition: background-color 0.3s ease;
+
   &:hover {
     background-color: $color-accent;
   }
 
-  .go-to-another{
-    background-color: bisque;
+}
+.btn-space{
+  display: flex;
+  justify-content: flex-end;
+  max-height: 80px;
+}
+.classic-btn {
+  display: flex;
+  max-width: 120px;
+  padding: 10px;
+  margin: 10px;
+  background-color: $color-secondary;
+  color: $color-basic;
+  font-size: 15px;
+  font-family: Roboto;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: 5px solid $color-accent;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $color-accent;
   }
 }

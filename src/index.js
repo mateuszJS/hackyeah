@@ -1,9 +1,23 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import ProfilePage from './templates/Profile.html';
 import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
+import getProfile from './views/profile/profile.js';
+
+window.user = {};
+
+let emailFromStorage = localStorage.getItem("email");
+let idFromStorage = localStorage.getItem("id");
+
+if(emailFromStorage){
+    window.user.email = emailFromStorage;
+}
+if(idFromStorage){
+    window.user.id = idFromStorage;
+}
 
 const initSecondPage = function(oldRoute, transClass, id) {
     // Each page must have this method!
@@ -23,8 +37,15 @@ const initFirstPage = function(oldRoute, transClass) {
     Core.pageAnimationInit(oldRoute, transClass);
 }
 
-const didMountFirstPage = function () {
+const initProfilePage = function(oldRoute, transClass, id) {
+    //const param = id && parseInt(Core.removeSlashes(id));
+    //console.log('Init profile page with param: ', param);
+    Core.addElement(ProfilePage, 'page works-page ' + transClass);
+    Core.pageAnimationInit(oldRoute, transClass);
 
+}
+
+const didMountFirstPage = function () {
     // Here you will do the most action, now page is ready
     console.log('Did mount first page')
 }
@@ -36,7 +57,18 @@ const didMountSecondPage = function() {
     updatePrice('2 000');
 }
 
+const didMountProfilePage = function() {
+    // Here you will do the most action, now page is ready
+    getProfile(window.user);
+
+}
+
 const willUnmountFirstPage = function() {
+    // Page will me removed soon
+    console.log('will unmount first page');
+}
+
+const willUnmountSecondPage = function() {
     // Page will me removed soon
     console.log('will unmount first page');
 }
@@ -44,6 +76,11 @@ const willUnmountFirstPage = function() {
 const didRemovedFirstPage = function() {
     // Page was removed :(
     console.log('Did remove first page')
+}
+
+const didRemovedSecondPage = function() {
+    // Page was removed :(
+    console.log('Did remove second page')
 }
 
 Core.setupRoutes([
@@ -69,6 +106,22 @@ Core.setupRoutes([
         index: 1,
         initHandler: initSecondPage,
         mountedHandler: didMountSecondPage,
+        willUnmountHandler: willUnmountSecondPage,
+        didRemove: didRemovedSecondPage,
+        events: [
+            {
+                element: '.profile', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/profile') // action
+            },
+        ]
+    },
+    {
+        name: 'PROFILE',
+        path: /profile/,
+        index: 2,
+        initHandler: initProfilePage,
+        mountedHandler: didMountProfilePage,
         events: []
     },
 ]);
