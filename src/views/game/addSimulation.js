@@ -9,7 +9,7 @@ import createUndoButton from './createUndoButton';
 let undoButton;
 const curveLines = [];
 const init = () => {
-  const container = document.querySelector('.works-page');
+  const container = document.querySelector('.wrapper-game');
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   const raygun = new THREE.Raycaster();
   raygun.params.Points.threshold = 20;
@@ -87,7 +87,7 @@ const init = () => {
       if (dataFromPoint.type === 'Points') { // remove last track
         const track = getTrack();
         const lastCity = track[track.length - 1];
-        lastCity.material.color.set(0xffff00);
+        lastCity.material.color.set(0x2e3e82);
         removeLastCity();
 
         // Remove last curve line
@@ -124,7 +124,7 @@ const init = () => {
         }
 
 
-        dataFromPoint.material.color.set(0x0000ff);
+        dataFromPoint.material.color.set(0xe8b628);
         addNewCity(dataFromPoint);
       }
       // update, depends on track
@@ -159,7 +159,7 @@ const init = () => {
         if (dataFromPoint.type === 'Mesh') { // if it's adding action
           const points = curve.getPoints( 50 );
           const geometry = new THREE.BufferGeometry().setFromPoints( points );
-          const material = new THREE.LineBasicMaterial( { color : 0xaf1491, linewidth: 5, thickness: 10 } );
+          const material = new THREE.LineBasicMaterial( { color : 0xe8b628, linewidth: 5 } );
           const curveObject = new THREE.Line( geometry, material );
           // material.linewidth = 50;
           // curveObject.linewidth = 50;
