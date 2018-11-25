@@ -11,7 +11,7 @@ const randomSpherePoint = (radius) => {
   return [x,y,z];
 }
 
-const COUNT_CITIES = 18;
+const COUNT_CITIES = 15;
 const spheres = [];
 const createPoint = (distance) => {
   for (let i = 0; i < COUNT_CITIES; i++) {

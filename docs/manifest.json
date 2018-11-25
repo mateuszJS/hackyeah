@@ -1,0 +1,17 @@
+{
+  "name": "AppLongName",
+  "short_name": "AppShort",
+  "theme_color": "red",
+  "background_color": "blue",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-big.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ]
+}
