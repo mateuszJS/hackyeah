@@ -1,0 +1,37 @@
+.action-panel {
+  display: flex;
+  flex-grow: 1;
+  align-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.wrapper-game {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.col {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 20px;
+  background: red;
+  font-size: 20px;
+  text-align: left;
+  color: white;
+  &:nth-child(2) {
+    margin-left: auto;
+  }
+  p {
+    flex-basis: 100%;
+  }
+  &--hidden {
+    display: none;
+  }
+}
+
+#id_country {
+  font-size: 14px;
+}

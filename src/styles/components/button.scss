@@ -18,7 +18,14 @@
 }
 
 .submit-track {
-  margin-top: 65vh;
+  margin-top: auto;
+  flex-basis: 100%;
+  padding: 20px;
+  background: gray;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .left{

@@ -5,7 +5,6 @@ import ProfilePage from './templates/Profile.html';
 import SummaryPage from './templates/Summary.html';
 import InitSimulation from './views/game/addSimulation';
 import { submitTrack } from './views/game/trackController';
-import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
 import getProfile from './views/profile/profile.js';
@@ -55,8 +54,7 @@ const initSummaryPage = function(oldRoute, transClass, id) {
 
 const didMountSecondPage = function() {
     // Here you will do the most action, now page is ready
-    updatePlace('Polska', 'Random');
-    updatePrice('2 000');
+    console.log('Did mount second page');
 }
 
 const didMountProfilePage = function() {
@@ -91,7 +89,7 @@ Core.setupRoutes([
                 handler: Core.redirect('/profile') // action
             },
             {
-                element: '.accept', // selector to element
+                element: '.submit-track', // selector to element
                 type: 'click', // type of event
                 handler: Core.redirect('/summary') // action
             },
@@ -120,10 +118,7 @@ Core.setupRoutes([
             {
                 element: '.pay', // selector to element
                 type: 'click', // type of event
-                handler: Core.redirect('/payment'), // action
-                element: '.submit-track',
-                type: 'click',
-                handler: submitTrack
+                handler: () => window.open('https://www.payu.pl/'), // action
             },
         ]
     },
