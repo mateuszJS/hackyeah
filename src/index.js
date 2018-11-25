@@ -3,6 +3,8 @@ import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
 import ProfilePage from './templates/Profile.html';
 import SummaryPage from './templates/Summary.html';
+import InitSimulation from './views/game/addSimulation';
+import { submitTrack } from './views/game/trackController';
 import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
@@ -26,7 +28,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
     const param = id && parseInt(Core.removeSlashes(id));
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
-
+    InitSimulation();
 }
 
 const initFirstPage = function(oldRoute, transClass) {
@@ -118,7 +120,10 @@ Core.setupRoutes([
             {
                 element: '.pay', // selector to element
                 type: 'click', // type of event
-                handler: Core.redirect('/payment') // action
+                handler: Core.redirect('/payment'), // action
+                element: '.submit-track',
+                type: 'click',
+                handler: submitTrack
             },
         ]
     },
