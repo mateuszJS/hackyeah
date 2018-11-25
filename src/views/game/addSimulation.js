@@ -3,16 +3,21 @@ import clamp from '../../utils/clamp';
 import createPoint from './createPoint';
 import createLight from './createLight';
 import createPlanet from './createPlanet';
-import { addNewCity } from './trackController';
+import { addNewCity, getTrack, removeLastCity } from './trackController';
+import createUndoButton from './createUndoButton';
 
+let undoButton;
+const curveLines = [];
 const init = () => {
   const container = document.querySelector('.works-page');
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   const raygun = new THREE.Raycaster();
-  const RADIUS = clamp(70, window.innerWidth * 0.4, 400);
+  raygun.params.Points.threshold = 20;
+  const RADIUS = clamp(70, window.innerWidth * 0.35, 400);
   const WIDTH = window.innerWidth;
   const HEIGHT = window.innerHeight;
   renderer.setSize(WIDTH, HEIGHT);
+  renderer.setClearColor( 0x000000, 0 );
 
   const camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 10000);
   camera.position.set(0, 0, 500);
@@ -20,7 +25,6 @@ const init = () => {
 
   // create scene
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000, 0);
   scene.add(camera);
 
   container.appendChild(renderer.domElement);
@@ -68,21 +72,122 @@ const init = () => {
     friction.modY = Math.max(-MAX_MOVE, Math.min(moveY * 0.002, MAX_MOVE));
   }
 
-
   const onClick = () => {
     const x = ( event.clientX / window.innerWidth ) * 2 - 1;
     const y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
     raygun.setFromCamera({x, y}, camera);
-    const hits = raygun.intersectObjects(points, true);
+    const interactionArray = scene.children;// undoButton ? points.concat([undoButton, globe.children[1]]) : points;
+    const hits = raygun.intersectObjects(interactionArray, true);
     if (hits.length > 0) {
       const dataFromPoint = hits[0].object;
-      dataFromPoint.material.color.set(0x0000ff);
-      addNewCity({
-        id: dataFromPoint.cityId,
-        name: dataFromPoint.name,
-        country: dataFromPoint.country
-      })
+      if (dataFromPoint.isPlanet) {
+        return; //it's click on planet
+      }
+      if (dataFromPoint.type === 'Points') { // remove last track
+        const track = getTrack();
+        const lastCity = track[track.length - 1];
+        lastCity.material.color.set(0xffff00);
+        removeLastCity();
+
+        // Remove last curve line
+        const lastCurve = curveLines[curveLines.length - 1];
+        lastCurve.geometry.dispose();
+        lastCurve.material.dispose();
+        globe.remove(lastCurve);
+        curveLines.pop();
+
+      } else {
+        const track = getTrack();
+        const alreadyExists = track.reduce((acc, item) => {
+          return acc ? true : dataFromPoint === item;
+        }, false)
+
+        if (alreadyExists) {
+          alert('Hej! Koleżko, nie wiesz że rutyna zabija, juz raz to dodałeś!!!');
+          return; // to avoid copy item in array
+        }
+
+        if (track.length > 1) { // When it's already exists start point
+          const lastCity = track[track.length - 1];
+
+          const distance = Math.hypot(
+            lastCity.position.x - dataFromPoint.position.x,
+            lastCity.position.y - dataFromPoint.position.y,
+            lastCity.position.z - dataFromPoint.position.z
+          );
+          console.log(distance, Math.PI * 0.4 * RADIUS)
+          if (distance > Math.PI * 0.4 * RADIUS) { // too far (avoid bug with hidden icon in sphere)
+            alert('Hola hola smyku, zbyt daleko podążasz!');
+            return;
+          }
+        }
+
+
+        dataFromPoint.material.color.set(0x0000ff);
+        addNewCity(dataFromPoint);
+      }
+      // update, depends on track
+      const track = getTrack();
+
+      if (track.length >= 2) {
+        // draw curve line
+        const prevCity = track[track.length - 2];
+        const lastCity = track[track.length - 1];
+        const centerX = (lastCity.position.x + prevCity.position.x) / 2;
+        const centerY = (lastCity.position.y + prevCity.position.y) / 2;
+        const centerZ = (lastCity.position.z + prevCity.position.z) / 2;
+
+        const distance = Math.hypot(
+          lastCity.position.x - prevCity.position.x,
+          lastCity.position.y - prevCity.position.y,
+          lastCity.position.z - prevCity.position.z
+        );
+
+        const vecBetween = new THREE.Vector3(
+          2 * centerX,
+          2 * centerY,
+          2 * centerZ
+        );
+
+        const curve = new THREE.QuadraticBezierCurve3(
+          prevCity.position,
+          vecBetween,
+          lastCity.position
+        );
+        
+        if (dataFromPoint.type === 'Mesh') { // if it's adding action
+          const points = curve.getPoints( 50 );
+          const geometry = new THREE.BufferGeometry().setFromPoints( points );
+          const material = new THREE.LineBasicMaterial( { color : 0xaf1491, linewidth: 5, thickness: 10 } );
+          const curveObject = new THREE.Line( geometry, material );
+          // material.linewidth = 50;
+          // curveObject.linewidth = 50;
+          globe.add(curveObject);
+          curveLines.push(curveObject);
+        }
+
+        // create button to undo last move
+        if (undoButton) {
+          undoButton.geometry.dispose();
+          undoButton.material.dispose();
+          globe.remove(undoButton);
+        }
+        undoButton = createUndoButton(
+          1.6 * centerX,
+          1.6 * centerY,
+          1.6 * centerZ
+        );
+        globe.add(undoButton);
+      } else if (track.length === 1) {
+        if (undoButton) {
+          undoButton.geometry.dispose();
+          undoButton.material.dispose();
+          globe.remove(undoButton);
+          undoButton = undefined;
+        }
+      }
+
       renderer.render(scene, camera);
     }
   }

@@ -3,7 +3,6 @@ import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
 import InitSimulation from './views/game/addSimulation';
 import { submitTrack } from './views/game/trackController';
-import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
 
@@ -34,8 +33,6 @@ const didMountFirstPage = function () {
 const didMountSecondPage = function() {
     // Here you will do the most action, now page is ready
     console.log('Did mount second page');
-    updatePlace('Polska', 'Random');
-    updatePrice('2 000');
 }
 
 const willUnmountFirstPage = function() {
