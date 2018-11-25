@@ -1,16 +1,30 @@
 import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
+import ProfilePage from './templates/Profile.html';
+import SummaryPage from './templates/Summary.html';
 import InitSimulation from './views/game/addSimulation';
 import { submitTrack } from './views/game/trackController';
 import './styles/index.scss';
 import getData from './views/login/login.js';
+import getProfile from './views/profile/profile.js';
+
+window.user = {};
+
+let emailFromStorage = localStorage.getItem("email");
+let idFromStorage = localStorage.getItem("id");
+
+if(emailFromStorage){
+    window.user.email = emailFromStorage;
+}
+if(idFromStorage){
+    window.user.id = idFromStorage;
+}
 
 const initSecondPage = function(oldRoute, transClass, id) {
     // Each page must have this method!
     // In this function you can assign params to variables, start some async actions
     const param = id && parseInt(Core.removeSlashes(id));
-    console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
     InitSimulation();
@@ -18,16 +32,24 @@ const initSecondPage = function(oldRoute, transClass, id) {
 
 const initFirstPage = function(oldRoute, transClass) {
     // Each page must have this method!
-    // In this function you can assign params to variables, start some async actions
-    console.log('will mount first page');
+    // In this function you can assign params to variables, start some async action
     Core.addElement(MainPageTemplate, 'page main-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
 }
 
-const didMountFirstPage = function () {
+const initProfilePage = function(oldRoute, transClass, id) {
+    //const param = id && parseInt(Core.removeSlashes(id));
+    //console.log('Init profile page with param: ', param);
+    Core.addElement(ProfilePage, 'page works-page ' + transClass);
+    Core.pageAnimationInit(oldRoute, transClass);
 
-    // Here you will do the most action, now page is ready
-    console.log('Did mount first page')
+}
+
+const initSummaryPage = function(oldRoute, transClass, id) {
+    //const param = id && parseInt(Core.removeSlashes(id));
+    //console.log('Init profile page with param: ', param);
+    Core.addElement(SummaryPage, 'page works-page ' + transClass);
+    Core.pageAnimationInit(oldRoute, transClass);
 }
 
 const didMountSecondPage = function() {
@@ -35,14 +57,9 @@ const didMountSecondPage = function() {
     console.log('Did mount second page');
 }
 
-const willUnmountFirstPage = function() {
-    // Page will me removed soon
-    console.log('will unmount first page');
-}
-
-const didRemovedFirstPage = function() {
-    // Page was removed :(
-    console.log('Did remove first page')
+const didMountProfilePage = function() {
+    // Here you will do the most action, now page is ready
+    getProfile(window.user);
 }
 
 Core.setupRoutes([
@@ -51,9 +68,6 @@ Core.setupRoutes([
         path: /^$/, // url to page
         index: 0, // index, to decide from which side naimations should start
         initHandler: initFirstPage,
-        mountedHandler: didMountFirstPage,
-        willUnmountHandler: willUnmountFirstPage,
-        didRemove: didRemovedFirstPage,
         events: [ // list of events
             {
                 element: '#form', // selector to element
@@ -70,9 +84,41 @@ Core.setupRoutes([
         mountedHandler: didMountSecondPage,
         events: [
             {
-                element: '.submit-track',
-                type: 'click',
-                handler: submitTrack
+                element: '.profile', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/profile') // action
+            },
+            {
+                element: '.submit-track', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/summary') // action
+            },
+        ]
+    },
+    {
+        name: 'PROFILE',
+        path: /profile/,
+        index: 2,
+        initHandler: initProfilePage,
+        mountedHandler: didMountProfilePage,
+        events: [
+            {
+                element: '.come-back', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/second') // action
+            },
+        ]
+    },
+    {
+        name: 'SUMMARY',
+        path: /summary/,
+        index: 3,
+        initHandler: initSummaryPage,
+        events: [
+            {
+                element: '.pay', // selector to element
+                type: 'click', // type of event
+                handler: () => window.open('https://www.payu.pl/'), // action
             },
         ]
     },
