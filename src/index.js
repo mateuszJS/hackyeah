@@ -103,7 +103,7 @@ Core.setupRoutes([
         mountedHandler: didMountProfilePage,
         events: [
             {
-                element: '.come-back', // selector to element
+                element: '.submit', // selector to element
                 type: 'click', // type of event
                 handler: Core.redirect('/second') // action
             },

@@ -10,28 +10,32 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
+  position: relative;
 }
 
 .col {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   padding: 20px;
-  background: red;
+  background: white;
   font-size: 20px;
   text-align: left;
-  color: white;
+  color: $color-basic;
+  box-shadow: 0 0 15px $color-shadow;
+  border-top-right-radius: 5px;
+  width: 190px;
   &:nth-child(2) {
     margin-left: auto;
+    border-top-left-radius: 5px;
   }
   p {
     flex-basis: 100%;
+    &:first-child {
+      font-size: 14px;
+    }
   }
   &--hidden {
     display: none;
   }
-}
-
-#id_country {
-  font-size: 14px;
 }

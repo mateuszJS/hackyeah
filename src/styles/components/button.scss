@@ -21,11 +21,15 @@
   margin-top: auto;
   flex-basis: 100%;
   padding: 20px;
-  background: gray;
-  color: white;
+  background: $color-secondary;
+  border: none;
+  color: $color-basic;
+  font-family: Roboto;
+  font-weight: 500;
   font-size: 20px;
   text-align: center;
   text-transform: uppercase;
+  box-shadow: 0 0 15px $color-shadow;
 }
 
 .left{
@@ -57,4 +61,12 @@
   &:hover {
     background-color: $color-accent;
   }
+}
+
+.submit {
+  background: $color-accent;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 15px $color-shadow;
 }

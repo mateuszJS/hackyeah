@@ -16,7 +16,7 @@ const spheres = [];
 const createPoint = (distance) => {
   for (let i = 0; i < COUNT_CITIES; i++) {
     const geometry = new THREE.SphereGeometry( 6, 8, 8 );
-    const material = new THREE.MeshBasicMaterial( {color: 0xaf1491} );
+    const material = new THREE.MeshBasicMaterial( {color: 0x2e3e82} );
     const sphere = new THREE.Mesh( geometry, material );
     const [x, y, z] = randomSpherePoint(distance);
     sphere.position.set(x, y, z);
