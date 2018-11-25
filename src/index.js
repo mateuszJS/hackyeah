@@ -2,6 +2,7 @@ import Core from './Core';
 import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
 import ProfilePage from './templates/Profile.html';
+import SummaryPage from './templates/Summary.html';
 import { updatePlace, updatePrice } from './views/game/updateNodes';
 import './styles/index.scss';
 import getData from './views/login/login.js';
@@ -45,6 +46,14 @@ const initProfilePage = function(oldRoute, transClass, id) {
 
 }
 
+const initSummaryPage = function(oldRoute, transClass, id) {
+    //const param = id && parseInt(Core.removeSlashes(id));
+    //console.log('Init profile page with param: ', param);
+    Core.addElement(SummaryPage, 'page works-page ' + transClass);
+    Core.pageAnimationInit(oldRoute, transClass);
+
+}
+
 const didMountFirstPage = function () {
     // Here you will do the most action, now page is ready
     console.log('Did mount first page')
@@ -60,6 +69,11 @@ const didMountSecondPage = function() {
 const didMountProfilePage = function() {
     // Here you will do the most action, now page is ready
     getProfile(window.user);
+}
+
+const didMountSummaryPage = function() {
+    // Here you will do the most action, now page is ready
+    
 
 }
 
@@ -114,6 +128,11 @@ Core.setupRoutes([
                 type: 'click', // type of event
                 handler: Core.redirect('/profile') // action
             },
+            {
+                element: '.accept', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/summary') // action
+            },
         ]
     },
     {
@@ -122,7 +141,27 @@ Core.setupRoutes([
         index: 2,
         initHandler: initProfilePage,
         mountedHandler: didMountProfilePage,
-        events: []
+        events: [
+            {
+                element: '.come-back', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/second') // action
+            },
+        ]
+    },
+    {
+        name: 'SUMMARY',
+        path: /summary/,
+        index: 3,
+        initHandler: initSummaryPage,
+        mountedHandler: didMountSummaryPage,
+        events: [
+            {
+                element: '.pay', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/payment') // action
+            },
+        ]
     },
 ]);
 

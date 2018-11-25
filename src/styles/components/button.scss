@@ -17,9 +17,17 @@
   }
 
 }
+
+.left{
+  justify-content: flex-end;
+}
+
+.center{
+  justify-content: center;
+}
+
 .btn-space{
   display: flex;
-  justify-content: flex-end;
   max-height: 80px;
 }
 .classic-btn {
