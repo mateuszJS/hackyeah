@@ -115,7 +115,7 @@ Core.setupRoutes([
         mountedHandler: didMountProfilePage,
         events: [
             {
-                element: '.come-back', // selector to element
+                element: '.submit', // selector to element
                 type: 'click', // type of event
                 handler: Core.redirect('/second') // action
             },
@@ -130,7 +130,7 @@ Core.setupRoutes([
             {
                 element: '.pay', // selector to element
                 type: 'click', // type of event
-                handler: () => window.open('https://www.payu.pl/'), // action
+                handler: () => window.location.replace('https://www.payu.pl/'), // action
             },
         ]
     },

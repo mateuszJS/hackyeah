@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import PlanetTexture from '../../assets/cyan-map.png';
+import PlanetTexture from '../../assets/purple-map.png';
 
 const createPlanet = (radius) => {
   const SEGMENTS = 50;
@@ -16,7 +16,7 @@ const createPlanet = (radius) => {
     mesh.rotateY(-1.565); // NOTE: now it's right long and lang
     globe.add(mesh);
     globe.position.z = -300;
-    globe.position.y = -50;
+    globe.position.y = 10;
   });
 
   return globe;
