@@ -3,6 +3,7 @@ import WorksPageTemplate from './templates/SecondPage.html';
 import MainPageTemplate from './templates/FirstPage.html';
 import ProfilePage from './templates/Profile.html';
 import SummaryPage from './templates/Summary.html';
+import InfoPage from './templates/Info.html';
 import InitSimulation from './views/game/addSimulation';
 import { submitTrack } from './views/game/trackController';
 import './styles/index.scss';
@@ -42,13 +43,19 @@ const initProfilePage = function(oldRoute, transClass, id) {
     //console.log('Init profile page with param: ', param);
     Core.addElement(ProfilePage, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
-
 }
 
 const initSummaryPage = function(oldRoute, transClass, id) {
     //const param = id && parseInt(Core.removeSlashes(id));
     //console.log('Init profile page with param: ', param);
     Core.addElement(SummaryPage, 'page works-page ' + transClass);
+    Core.pageAnimationInit(oldRoute, transClass);
+}
+
+const initInfoPage = function(oldRoute, transClass) {
+    // Each page must have this method!
+    // In this function you can assign params to variables, start some async action
+    Core.addElement(InfoPage, 'page main-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
 }
 
@@ -93,6 +100,11 @@ Core.setupRoutes([
                 type: 'click', // type of event
                 handler: Core.redirect('/summary') // action
             },
+            {
+                element: '.info', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/info') // action
+            },
         ]
     },
     {
@@ -118,7 +130,20 @@ Core.setupRoutes([
             {
                 element: '.pay', // selector to element
                 type: 'click', // type of event
-                handler: () => window.open('https://www.payu.pl/'), // action
+                handler: () => window.location.replace('https://www.payu.pl/'), // action
+            },
+        ]
+    },
+    {
+        name: 'INFO',
+        path: /info/,
+        index: 4,
+        initHandler: initInfoPage,
+        events: [
+            {
+                element: '.come-back', // selector to element
+                type: 'click', // type of event
+                handler: Core.redirect('/second') // action
             },
         ]
     },

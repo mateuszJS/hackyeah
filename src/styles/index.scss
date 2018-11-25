@@ -21,3 +21,19 @@ body {
   color: $color-basic;
   font-family: Roboto;
 }
+
+.info-list-title {
+  font-size: 45px;
+}
+
+.info-list {
+  list-style: decimal;
+  text-align: left;
+  padding: 20px;
+  font-size: 30px;
+  color: $color-accent;
+  line-height: 30px;
+  li {
+    padding: 20px 0;
+  }
+}
