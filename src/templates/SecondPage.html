@@ -1,25 +1,15 @@
-<div class="wrapper animated delay-4">
-    <!--<button class="btn come-back">come back!</button>-->
-    <div>
-        <img src="../assets/info-icon.svg" class="icon-right" />
-    </div>
-        <p>Choose next place to visit</p>
-    <!-- wrapper for Earth model-->
-    <div>
-    </div>
-    <button class="submit-track">Submit track</button>
-    <div class="col-wrapper">
-            <div class="col-half">
-                <h3>Chosen localization:</h3>
-                <br>
-                <!-- Get place chosen from Earth model -->
-                <p id="id_country"></p>
-                <p id="id_city"></p>
-            </div>
-            <div class="col-half">
-                <h3>Prize you may win:</h3>
-                <br>
-                <p><span id="id_price"></span><span> PLN</span></p>
-            </div>
+<div class="animated delay-4 wrapper-game">
+    <img src="../assets/info-icon.svg" class="icon-right" />
+    <button class="profile classic-btn">Profile</button>
+    <p class="title">Choose next<br>place to visit</p>
+    <div class="action-panel">
+        <div class="col col--hidden">
+            <p id="id_country"></p>
+            <p id="id_city"></p>
         </div>
+        <div class="col col--hidden">
+            <p><span id="id_price"></span><span> PLN</span></p>
+        </div>
+        <button class="submit-track col--hidden">Submit</button>    
+    </div>
 </div>

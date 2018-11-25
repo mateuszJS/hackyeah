@@ -11,12 +11,12 @@ const randomSpherePoint = (radius) => {
   return [x,y,z];
 }
 
-const COUNT_CITIES = 20;
+const COUNT_CITIES = 18;
 const spheres = [];
 const createPoint = (distance) => {
   for (let i = 0; i < COUNT_CITIES; i++) {
     const geometry = new THREE.SphereGeometry( 6, 8, 8 );
-    const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const material = new THREE.MeshBasicMaterial( {color: 0xaf1491} );
     const sphere = new THREE.Mesh( geometry, material );
     const [x, y, z] = randomSpherePoint(distance);
     sphere.position.set(x, y, z);
@@ -27,12 +27,12 @@ const createPoint = (distance) => {
   .then(response => response.json())
   .then(function(myJson) {
     spheres.forEach((sphere, index) => {
-      const data = myJson[index];
-      const vec = lonLatToVector3(data.Longitude, data.Latitude, distance);
+      const data = myJson.data[index];
+      const vec = lonLatToVector3(data.longitude, data.latitude, distance);
       sphere.position.set(vec.x, vec.y, vec.z);
-      sphere.cityId = data.CityID;
-      sphere.name = data.CityName;
-      sphere.country = data.Country;
+      sphere.cityId = data.cityID;
+      sphere.name = data.cityName;
+      sphere.country = data.country;
     })
   });
   return spheres;
@@ -43,7 +43,6 @@ const lonLatToVector3 = (lng, lat, radius) => {
   const theta = Math.PI * (lng / 180);
   const spherical = THREE.Spherical(radius || radius || 1, phi, theta);
   return new THREE.Vector3().setFromSpherical(spherical);
-  
 };
 
 export default createPoint;
