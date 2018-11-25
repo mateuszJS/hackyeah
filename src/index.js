@@ -24,7 +24,6 @@ const initSecondPage = function(oldRoute, transClass, id) {
     // Each page must have this method!
     // In this function you can assign params to variables, start some async actions
     const param = id && parseInt(Core.removeSlashes(id));
-    console.log('Init second page with param: ', param);
     Core.addElement(WorksPageTemplate, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
 
@@ -32,8 +31,7 @@ const initSecondPage = function(oldRoute, transClass, id) {
 
 const initFirstPage = function(oldRoute, transClass) {
     // Each page must have this method!
-    // In this function you can assign params to variables, start some async actions
-    console.log('will mount first page');
+    // In this function you can assign params to variables, start some async action
     Core.addElement(MainPageTemplate, 'page main-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
 }
@@ -51,17 +49,10 @@ const initSummaryPage = function(oldRoute, transClass, id) {
     //console.log('Init profile page with param: ', param);
     Core.addElement(SummaryPage, 'page works-page ' + transClass);
     Core.pageAnimationInit(oldRoute, transClass);
-
-}
-
-const didMountFirstPage = function () {
-    // Here you will do the most action, now page is ready
-    console.log('Did mount first page')
 }
 
 const didMountSecondPage = function() {
     // Here you will do the most action, now page is ready
-    console.log('Did mount second page');
     updatePlace('Polska', 'Random');
     updatePrice('2 000');
 }
@@ -71,41 +62,12 @@ const didMountProfilePage = function() {
     getProfile(window.user);
 }
 
-const didMountSummaryPage = function() {
-    // Here you will do the most action, now page is ready
-    
-
-}
-
-const willUnmountFirstPage = function() {
-    // Page will me removed soon
-    console.log('will unmount first page');
-}
-
-const willUnmountSecondPage = function() {
-    // Page will me removed soon
-    console.log('will unmount first page');
-}
-
-const didRemovedFirstPage = function() {
-    // Page was removed :(
-    console.log('Did remove first page')
-}
-
-const didRemovedSecondPage = function() {
-    // Page was removed :(
-    console.log('Did remove second page')
-}
-
 Core.setupRoutes([
     {
         name: 'FIRST', // For developers, to easy recognize route, it isn't used by core
         path: /^$/, // url to page
         index: 0, // index, to decide from which side naimations should start
         initHandler: initFirstPage,
-        mountedHandler: didMountFirstPage,
-        willUnmountHandler: willUnmountFirstPage,
-        didRemove: didRemovedFirstPage,
         events: [ // list of events
             {
                 element: '#form', // selector to element
@@ -120,8 +82,6 @@ Core.setupRoutes([
         index: 1,
         initHandler: initSecondPage,
         mountedHandler: didMountSecondPage,
-        willUnmountHandler: willUnmountSecondPage,
-        didRemove: didRemovedSecondPage,
         events: [
             {
                 element: '.profile', // selector to element
@@ -154,7 +114,6 @@ Core.setupRoutes([
         path: /summary/,
         index: 3,
         initHandler: initSummaryPage,
-        mountedHandler: didMountSummaryPage,
         events: [
             {
                 element: '.pay', // selector to element
