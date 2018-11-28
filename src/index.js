@@ -5,7 +5,6 @@ import ProfilePage from './templates/Profile.html';
 import SummaryPage from './templates/Summary.html';
 import InfoPage from './templates/Info.html';
 import InitSimulation from './views/game/addSimulation';
-import { submitTrack } from './views/game/trackController';
 import './styles/index.scss';
 import getData from './views/login/login.js';
 import getProfile from './views/profile/profile.js';

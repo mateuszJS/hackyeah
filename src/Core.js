@@ -90,12 +90,14 @@ const animateRoute = function(oldRoute, transClass) {
 
 const navigateToThis = function() {
   if(!Router.isTrainsition) {
-      Router.navigate(this);
+    Router.navigate(this);
+  } else {
+    console.warn('You are trying to change page too early, transition is still on going!')
   }
 }
 
 const redirect = function(path) {
-    return navigateToThis.bind(path);
+	return navigateToThis.bind(path);
 }
 
 window.addEventListener('popstate', function(e) {
@@ -124,8 +126,8 @@ if (('ontouchstart' in window) || window.DocumentTouch && document instanceof Do
     device.isTouchDevice = true;
 }
 const updateCSSunit = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+	const vh = window.innerHeight * 0.01;
+	document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
 window.addEventListener('resize', updateCSSunit);
