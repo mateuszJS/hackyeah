@@ -1,27 +1,31 @@
-import * as THREE from 'three';
-import clamp from '../../utils/clamp';
+import THREE from './customBuildThree';
 import createPoint from './createPoint';
 import createLight from './createLight';
 import createPlanet from './createPlanet';
 import { addNewCity, getTrack, removeLastCity } from './trackController';
-import createUndoButton from './createUndoButton';
+import { createFlyLine, removeLastFlyLine, updateLines } from './flyLines.js';
+import { validateTrack } from './validateTrack';
+import clamp from '../../utils/clamp';
 
-let undoButton;
-const curveLines = [];
+const calcCameraDistance = dangerX => {
+  const x = clamp(350, dangerX, 800);
+  return 0.00310259 * Math.pow(x, 2) - 5.41643 * x + 3170.16;
+}
+
 const init = () => {
   const container = document.querySelector('.wrapper-game');
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   const raygun = new THREE.Raycaster();
   raygun.params.Points.threshold = 20;
-  const RADIUS = clamp(70, window.innerWidth * 0.35, 400);
+  const RADIUS = 250;
+  
   const WIDTH = window.innerWidth;
   const HEIGHT = window.innerHeight;
   renderer.setSize(WIDTH, HEIGHT);
   renderer.setClearColor( 0x000000, 0 );
 
   const camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 10000);
-  camera.position.set(0, 0, 500);
-
+  camera.position.set(0, 0, calcCameraDistance(WIDTH));
 
   // create scene
   const scene = new THREE.Scene();
@@ -77,117 +81,37 @@ const init = () => {
     const y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
     raygun.setFromCamera({x, y}, camera);
-    const interactionArray = scene.children;// undoButton ? points.concat([undoButton, globe.children[1]]) : points;
-    const hits = raygun.intersectObjects(interactionArray, true);
-    if (hits.length > 0) {
-      const dataFromPoint = hits[0].object;
-      if (dataFromPoint.isPlanet) {
-        return; //it's click on planet
-      }
-      if (dataFromPoint.type === 'Points') { // remove last track
-        const track = getTrack();
-        const lastCity = track[track.length - 1];
-        lastCity.material.color.set(0x2e3e82);
-        removeLastCity();
+    const hits = raygun.intersectObjects(scene.children, true);
+    if (hits.length === 0) return;
+  
+    const dataFromPoint = hits[0].object;
+    if (dataFromPoint.customType === 'PLANET') {
+      return; // it's click on planet
+    }
+  
+    const track = getTrack();
+    if (dataFromPoint.customType === 'UNDO_BUTTON') { // remove last place
+      const lastCity = track[track.length - 1];
+      lastCity.material.color.set(0x2e3e82);
+      removeLastCity();
 
-        // Remove last curve line
-        const lastCurve = curveLines[curveLines.length - 1];
-        lastCurve.geometry.dispose();
-        lastCurve.material.dispose();
-        globe.remove(lastCurve);
-        curveLines.pop();
-
-      } else {
-        const track = getTrack();
-        const alreadyExists = track.reduce((acc, item) => {
-          return acc ? true : dataFromPoint === item;
-        }, false)
-
-        if (alreadyExists) {
-          alert('Hej! Koleżko, nie wiesz że rutyna zabija, juz raz to dodałeś!!!');
-          return; // to avoid copy item in array
-        }
-
-        if (track.length > 1) { // When it's already exists start point
-          const lastCity = track[track.length - 1];
-
-          const distance = Math.hypot(
-            lastCity.position.x - dataFromPoint.position.x,
-            lastCity.position.y - dataFromPoint.position.y,
-            lastCity.position.z - dataFromPoint.position.z
-          );
-          console.log(distance, Math.PI * 0.4 * RADIUS)
-          if (distance > Math.PI * 0.4 * RADIUS) { // too far (avoid bug with hidden icon in sphere)
-            alert('Hola hola smyku, zbyt daleko podążasz!');
-            return;
-          }
-        }
-
-
-        dataFromPoint.material.color.set(0xe8b628);
-        addNewCity(dataFromPoint);
-      }
-      // update, depends on track
-      const track = getTrack();
+      // Remove last curve line
+      const prevCityPos = track[track.length - 2].position;
+      const lastCityPos = track[track.length - 1].position;
+      removeLastFlyLine(globe, prevCityPos, lastCityPos);
+    } else { // add new place
+      const valdiTrack = validateTrack(dataFromPoint, track, RADIUS);
+      if (!valdiTrack) return;
+      dataFromPoint.material.color.set(0xe8b628);
+      addNewCity(dataFromPoint);
 
       if (track.length >= 2) {
-        // draw curve line
-        const prevCity = track[track.length - 2];
-        const lastCity = track[track.length - 1];
-        const centerX = (lastCity.position.x + prevCity.position.x) / 2;
-        const centerY = (lastCity.position.y + prevCity.position.y) / 2;
-        const centerZ = (lastCity.position.z + prevCity.position.z) / 2;
-
-        const distance = Math.hypot(
-          lastCity.position.x - prevCity.position.x,
-          lastCity.position.y - prevCity.position.y,
-          lastCity.position.z - prevCity.position.z
-        );
-
-        const vecBetween = new THREE.Vector3(
-          2 * centerX,
-          2 * centerY,
-          2 * centerZ
-        );
-
-        const curve = new THREE.QuadraticBezierCurve3(
-          prevCity.position,
-          vecBetween,
-          lastCity.position
-        );
-        
-        if (dataFromPoint.type === 'Mesh') { // if it's adding action
-          const points = curve.getPoints( 50 );
-          const geometry = new THREE.BufferGeometry().setFromPoints( points );
-          const material = new THREE.LineBasicMaterial( { color : 0xe8b628, linewidth: 5 } );
-          const curveObject = new THREE.Line( geometry, material );
-          // material.linewidth = 50;
-          // curveObject.linewidth = 50;
-          globe.add(curveObject);
-          curveLines.push(curveObject);
-        }
-
-        // create button to undo last move
-        if (undoButton) {
-          undoButton.geometry.dispose();
-          undoButton.material.dispose();
-          globe.remove(undoButton);
-        }
-        undoButton = createUndoButton(
-          1.6 * centerX,
-          1.6 * centerY,
-          1.6 * centerZ
-        );
-        globe.add(undoButton);
-      } else if (track.length === 1) {
-        if (undoButton) {
-          undoButton.geometry.dispose();
-          undoButton.material.dispose();
-          globe.remove(undoButton);
-          undoButton = undefined;
+        if (dataFromPoint.customType === 'CITY') { // if it's adding action
+          const prevCityPos = track[track.length - 2].position;
+          const lastCityPos = track[track.length - 1].position;
+          createFlyLine(globe, prevCityPos, lastCityPos);
         }
       }
-
       renderer.render(scene, camera);
     }
   }
@@ -201,6 +125,8 @@ const init = () => {
 
     rotate(globe, new THREE.Vector3(0, 1, 0), friction.modX);
     rotate(globe, new THREE.Vector3(1, 0, 0), friction.modY);
+
+    updateLines();
 
     renderer.render( scene, camera );
     requestAnimationFrame(update);  

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import THREE from './customBuildThree';
 
 const createLight = () => {
   const pointLight = new THREE.PointLight(0xFFFFFF);

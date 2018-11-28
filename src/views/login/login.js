@@ -1,6 +1,6 @@
 import Core from '../../Core';
 
-function cleanErrors(element, index, array) {
+function cleanErrors(element) {
     element.innerHTML = "";
 }
 
@@ -27,27 +27,29 @@ function getData(evt) {
 }
 
 function setData(email, password) {
-    const url = "http://hackyeahbe.azurewebsites.net/chcem/userkow/logowanko";
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", url);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify({ Email: email, Password: password }));
+    Core.redirect('/second')(); // TODO: Check why it doesn't work
 
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState === 4) {
-            let res = JSON.parse(xmlhttp.response);
-            if (res.success) {
-                window.user.email = email;
-                window.user.id = res.data;
-                localStorage.setItem("email", window.user.email);
-                localStorage.setItem("id", window.user.id);
+    // const url = "http://hackyeahbe.azurewebsites.net/chcem/userkow/logowanko";
+    // let xmlhttp = new XMLHttpRequest();
+    // xmlhttp.open("POST", url);
+    // xmlhttp.setRequestHeader("Content-Type", "application/json");
+    // xmlhttp.send(JSON.stringify({ Email: email, Password: password }));
 
-                Core.redirect('/second')();
-            } else {
-                document.getElementById('incorrect_data').innerHTML = "Icorrect e-mail or/and password";
-            }
-        }
-    }
+    // xmlhttp.onreadystatechange = function () {
+    //     if (xmlhttp.readyState === 4) {
+    //         let res = JSON.parse(xmlhttp.response);
+    //         if (res.success) {
+    //             window.user.email = email;
+    //             window.user.id = res.data;
+    //             localStorage.setItem("email", window.user.email);
+    //             localStorage.setItem("id", window.user.id);
+
+    //             Core.redirect('/second')(); // TODO: Check why it doesn't work
+    //         } else {
+    //             document.getElementById('incorrect_data').innerHTML = "Icorrect e-mail or/and password";
+    //         }
+    //     }
+    // }
 }
 
 export default getData;

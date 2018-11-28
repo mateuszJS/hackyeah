@@ -6782,6 +6782,10 @@ tempfile@^2.0.0:
     temp-dir "^1.0.0"
     uuid "^3.0.1"
 
+three.meshline@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/three.meshline/-/three.meshline-1.1.0.tgz#cf66be97b239a044d9d80b8bbf63673eb4dc09fc"
+
 three@^0.98.0:
   version "0.98.0"
   resolved "https://registry.yarnpkg.com/three/-/three-0.98.0.tgz#11d4e3cca4b5d099c7de0ea5afa153b5d20cda84"

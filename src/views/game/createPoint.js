@@ -1,40 +1,23 @@
-import * as THREE from 'three';
+import THREE from './customBuildThree';
+import { cities } from './data';
 
-const randomSpherePoint = (radius) => {
-  const u = Math.random();
-  const v = Math.random();
-  const theta = 2 * Math.PI * u;
-  const phi = Math.acos(2 * v - 1);
-  const x = (radius * Math.sin(phi) * Math.cos(theta));
-  const y = (radius * Math.sin(phi) * Math.sin(theta));
-  const z = (radius * Math.cos(phi));
-  return [x,y,z];
-}
-
-const COUNT_CITIES = 15;
-const spheres = [];
 const createPoint = (distance) => {
-  for (let i = 0; i < COUNT_CITIES; i++) {
+  const spheres = [];
+  for (let i = 0; i < cities.length; i++) {
     const geometry = new THREE.SphereGeometry( 6, 8, 8 );
     const material = new THREE.MeshBasicMaterial( {color: 0x2e3e82} );
     const sphere = new THREE.Mesh( geometry, material );
-    const [x, y, z] = randomSpherePoint(distance);
-    sphere.position.set(x, y, z);
+
+    const data = cities[i];
+    const vec = lonLatToVector3(data.longitude, data.latitude, distance);
+
+    sphere.position.set(vec.x, vec.y, vec.z);
+    sphere.cityId = data.cityID;
+    sphere.name = data.cityName;
+    sphere.country = data.country;
+    sphere.customType = 'CITY';
     spheres.push(sphere);
   }
-
-  fetch('http://hackyeahbe.azurewebsites.net/chcem/miasta')
-  .then(response => response.json())
-  .then(function(myJson) {
-    spheres.forEach((sphere, index) => {
-      const data = myJson.data[index];
-      const vec = lonLatToVector3(data.longitude, data.latitude, distance);
-      sphere.position.set(vec.x, vec.y, vec.z);
-      sphere.cityId = data.cityID;
-      sphere.name = data.cityName;
-      sphere.country = data.country;
-    })
-  });
   return spheres;
 }
 
